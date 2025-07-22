@@ -43,6 +43,17 @@
   <script src="static/js/bulma-carousel.min.js"></script>
   <script src="static/js/bulma-slider.min.js"></script>
   <script src="static/js/index.js"></script>
+  <!-- Add MathJax for LaTeX rendering -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
 </head>
 <body>
 
@@ -52,7 +63,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Complex Instruction Following with Diverse Style Policies</h1>
+            <h1 class="title is-1 publication-title">Complex Instruction Following with Diverse Style Policies in Football Games</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
@@ -144,17 +155,11 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Recent advancements in language-controlled reinforcement learning (LC-RL) have demonstrated
-            the potential of training RL agents to follow human instructions in domains such as object
-            manipulation, navigation, and text-based environments. To further extend these capabilities to high-level or abstract language 
-            instructions in complex environments, we introduce a novel LC-RL paradigm: Language-Controlled Diverse Style Policies (LCDSP). 
-            This paradigm employs a Diverse Style Training (DST) method to efficiently generate diverse style policies capable of following intricate instructions.
-            The DST method achieves this by modulating meta-behaviors through style parameters. 
-            Additionally, LCDSP utilizes a specially designed Degree-to-Parameter (DTP) prompt, 
-            which leverages the reasoning capabilities and common knowledge of large language models (LLMs) to align 
-            complex instructions with style parameters. Experimental results across various environments and
-            instruction types demonstrate that LCDSP effectively comprehends high-level and abstract instructions and accurately executes corresponding
-            behavioral styles in complex scenarios.
+            Language-controlled reinforcement learning (LC-RL) struggles with high-level instructions in complex multi-agent environments like football games. 
+            We introduce Language-Controlled Diverse Style Policies (LCDSP), a novel LC-RL paradigm for complex scenarios. LCDSP features two components: 
+            Diverse Style Training (DST) that trains a single policy with diverse behaviors via style parameters, and Style Interpreter (SI) that translates 
+            language instructions into corresponding parameters. Experiments in 5v5 football demonstrate LCDSP's ability to comprehend tactical instructions 
+            and execute diverse behavioral styles effectively.
           </p>
         </div>
       </div>
@@ -170,7 +175,7 @@
     <div class="container">
       <div class="image-container">
         <div class="image-item">
-          <img src="static/images/training_process.png" alt="First image" style="width: 85%; display: block; margin: auto;"/>
+          <img src="static/images/training_process.png" alt="First image" style="width: 70%; display: block; margin: auto;"/>
           <h2 class="subtitle has-text-centered">
             LCDSP training process
           </h2>
@@ -192,27 +197,23 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-full">
         <h2 class="title is-3">Diverse style training (DST)</h2>
-        <div class="content has-text-justified">
-          <p>
-            LCDSP enables a single model to be trained with diverse behavioral styles that can be flexibly controlled by multi-style parameters. The first figure at the top shows the training process.
-            For each training scenario, we initially design the agent's meta-behaviors, followed by a reward shaping process for these meta-behaviors.
-            This process establishes the relationship between the style parameters and the corresponding meta behaviors. 
-            <br> <br>
-            As the complexity of instructions and environments increases, more style parameters may be required to train a policy that meets the desired requirements. 
-            However, as the number of style parameters grows, the training difficulty also significantly increases. Current MORL methods typically support only 2 to 4 objectives, 
-            whereas our GRF 5v5 environment incorporates 10 meta-behaviors. But it is challenging to learn valuable styles from a wide range of combinations of style parameters. 
-            To address this challenge, we propose a <strong>Prioritized Style Sampling (PSS)</strong> method, which focuses on training style parameters that are more valuable for style formation. 
-            The PSS method enhances the training efficient by adjusting sampling probability of style parameters.
-            <br> <br>
-            Before each episode, the style generator produces a set of style parameters. These parameters dictate the magnitude of the rewards obtained when the agent executes the associated
-            meta-behaviors within the environment. Upon receiving the environment's state and style parameters, the agent get the corresponding action 
-            from the policy model and executes it. Subsequently, the environment provides the reward for the current action and the next state. These data is then fed
-            into the RL algorithm for training, and through continuous iterations, new policies are generated. 
-            Additionally, these data also used to adjust the probability distribution of style parameters generated by the style generator.
-            The second figure at the top shows two styles of a trained policy in the Google Research Football (GRF) 5v5 scenario.
-            
-          </p>
-        </div>
+          <div class="content has-text-justified">
+            <p>
+              LCDSP enables a single model to be trained with diverse behavioral styles controlled by multi-style parameters. 
+              The below figure shows the training process where we design meta-behaviors and establish relationships between 
+              style parameters and corresponding behaviors through reward shaping.
+              <br><br>
+              As instruction complexity increases, more style parameters are needed, but this significantly increases training difficulty. 
+              Current MORL methods typically support only 2-4 objectives, while our GRF 5v5 environment incorporates 10 meta-behaviors. 
+              To address this challenge, we propose <strong>Prioritized Style Sampling (PSS)</strong>, which focuses on training 
+              more valuable style parameters using entropy-based criteria to enhance training efficiency.
+              <br><br>
+              During training, the style generator produces style parameters that dictate reward magnitudes for associated meta-behaviors. 
+              The agent receives environment state and style parameters to generate actions, while the environment provides rewards 
+              and next states for RL training. This data also adjusts the style generator's probability distribution. 
+              The second figure above shows two different styles of a trained policy in the GRF 5v5 scenario.
+            </p>
+          </div>
       </div>
     </div>
   </div>
@@ -225,7 +226,7 @@
     <div class="container">
       <div class="image-container">
         <div class="image-item">
-          <img src="static/images/inference_process.png" alt="First image" style="width: 70%; display: block; margin: auto;"/>
+          <img src="static/images/inference_process.png" alt="First image" style="width: 65%; display: block; margin: auto;"/>
           <h2 class="subtitle has-text-centered">
             LCDSP inference process
           </h2>
@@ -242,24 +243,23 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-full">
         <h2 class="title is-3">Aligning language instructions with target policies</h2>
-        <div class="content has-text-justified">
-          <p>
-            The figure at the top shows the inference process of the LCDSP method. During inference, when an instruction is provided to the
-            system, the LLM combines the pre-prepared prompt with the instruction to generate a corresponding
-            response. This response is then transformed into a style parameter, denoted as ω. Unless new instructions are received,
-            the agent continues to operate using the last set of style parameters. Generating style parameters directly from instructions poses
-            a significant challenge for LLMs. This process requires understanding each parameter's meaning,
-            identifying those relevant to the instruction, and determining their specific values.
-            <br> <br>
-            To address these challenges, we propose a prompt method capable of interpreting the instruction
-            and generating appropriate style parameters to guide the multi-style policy. We refer to this method
-            as the <strong>Degree-to-Parameter prompt (DTP)</strong>. The process of the DTP method is shown in the figure below. The process consists of three fundamental modules: background information, an introduction
-            of style parameters, and an introduction table of style types. For a given scenario, the contents of
-            these modules remain constant. User instructions are integrated with these modules to form the
-            complete prompt, which is then input into the LLM to obtain a style degree table. A new set of style
-            parameters is then generated based on the style degree table.
-          </p>
-        </div>
+          <div class="content has-text-justified">
+            <p>
+              During inference, the Style Interpreter (SI) processes instructions to generate corresponding Style Parameters (SP). 
+              The SI addresses the challenge of translating high-level instructions into specific parameter values by understanding 
+              each parameter's meaning and determining relevant values.
+              <br><br>
+              The SI is implemented by fine-tuning a network built upon a pre-trained language model (PLM). 
+              User instructions are processed by the PLM to obtain representations, which serve as input for the 
+              Adaptive Style-adjustment Block (ASaB) responsible for generating SP. 
+              <br><br>
+              The ASaB incorporates behavior descriptions processed by the same PLM to generate adaptive scaling parameters 
+              $\gamma_i$ and $\beta_i$ for each style parameter. It then applies an affine transformation:
+              $$\text{ASaB}(Y_i | \gamma_i, \beta_i) = \gamma_i \cdot Y_i + \beta_i$$
+              where $Y_i$ represents the initial output for the i-th style parameter. The network uses multiple output heads 
+              for a multi-head regression task to predict the ground truth SP vector $\omega$.
+            </p>
+          </div>
       </div>
     </div>
   </div>
@@ -272,9 +272,9 @@
     <div class="container">
       <div class="image-container">
         <div class="image-item">
-          <img src="static/images/prompt.png" alt="First image"/ style="width: 70%; display: block; margin: auto;">
+          <img src="static/images/style_interpreter.png" alt="First image"/ style="width: 80%; display: block; margin: auto;">
           <h2 class="subtitle has-text-centered">
-            DTP method process
+            Overview of the SI module
           </h2>
         </div>
       </div>
@@ -286,30 +286,29 @@
 <!-- Paper methond -->
 <section class="section hero is-light">
   <div class="container is-max-desktop">
-    <div class="image-container">
+    <!-- <div class="image-container">
       <div class="image-item">
         <img src="static/images/training_scenario.png" alt="First image"/>
       </div>
-    </div>
+    </div> -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-full">
-        <h2 class="title is-3">Experiments</h2>
+        <h2 class="title is-3">High-Level Instructions Following Performance</h2>
         <div class="content has-text-justified">
           <p>
-            To evaluate the proposed LCDSP method, we designed four scenarios based on two popular RL
-            environments: Highway and GRF. In the GRF environment, we developed three scenarios involving
-            single-player, two-player, and 5v5. The image above shows four scenarios. Initially, we conducted experiments to test LCDSP’s ability to
-            follow low-level human instructions in the Highway environment and in the single-player and two-player 
-            GRF scenarios. Subsequently, we evaluated LCDSP on the 5v5 scenario of GRF, a complex environment characterized 
-            by long-horizon, multi-agents, to demonstrate its capability in understanding and executing <strong>high-level human instructions</strong>. 
-            The figure below shows the results of the LCDSP method accepting complex tactical instructions in combination with different LLMs in the complex 5v5 environment.
-            The video below demonstrates the effectiveness of the LCDSP method in executing natural language instructions in different scenarios of the GRF environment.
+          We evaluate LCDSP on the Google Research Football (GRF) 5v5 scenario, a complex multi-agent environment with 3K-step episodes and sparse rewards. 
+          To test high-level instruction following, we designed six football tactics: Positive Attack, All-out Attack, Balanced Play, Counter Attack, Park the Bus, and Tiki-Taka.
+          <br><br>
+          We generated 30 instructions per tactic (180 total) with corresponding strategy descriptions. 
+          Results show LCDSP accurately comprehends tactical instructions and executes diverse behavioral styles, 
+          demonstrating strong generalization across different instruction translation methods.
+          </p>
         </div>
       </div>
     </div>
-    <div class="image-container">
-      <div class="image-item">
-        <img src="static/images/5v5_nl_radar.png" alt="First image"/>
+    <div class="image-container" style="text-align: center; overflow: visible;">
+      <div class="image-item" style="overflow: visible;">
+          <img src="static/images/5v5_nl_radar.png" alt="First image" style="width: 150%; max-width: none; transform: translateX(-15%); display: block;">
       </div>
     </div>
   </div>
@@ -323,21 +322,21 @@
       <br>
       <h2 class="title is-3" style="text-align: center; font-size: 2.5rem;">Natural language instruction following video</h2>
       <br>
-      <h2 class="title is-3">GRF single-player scenario</h2>
+      <h2 class="title is-3">Balanced play to counter attack</h2>
       <br>
       <video poster="" id="tree" autoplay controls muted loop height="100%" style="width: 100%;">
         <!-- Your video here -->
-        <source src="static/videos/language_control_single_player_HD_fast.mp4"
+        <source src="static/videos/language_control_5v5_1_HD.mp4"
         type="video/mp4">
       </video>
       <br>
       <br>
       <br>
-      <h2 class="title is-3">GRF two-player scenario</h2>
+      <h2 class="title is-3">Tiki-Taka to park the bus</h2>
       <br>
       <video poster="" id="tree" autoplay controls muted loop height="100%" style="width: 100%;">
         <!-- Your video here -->
-        <source src="static/videos/language_control_two_player_HD_fast.mp4"
+        <source src="static/videos/language_control_5v5_2_HD.mp4"
         type="video/mp4">
       </video>
     </div>
@@ -345,24 +344,105 @@
 </section>
 <!-- End teaser video -->
 
-<section class="hero is-small">
+<!-- <section class="hero is-small">
   <div class="hero-body">
     <div class="container" style="max-width: 46%">
       <h2 class="title is-3">&nbsp;&nbsp;&nbsp;GRF 5v5 scenario</h2>
       <div id="results-carousel" class="carousel results-carousel">
         <div class="item item-video1">
           <video poster="" id="video1" autoplay controls muted loop height="100%">
-            <!-- Your video file here -->
             <source src="static/videos/language_control_5v5_1_HD.mp4"
             type="video/mp4">
           </video>
         </div>
         <div class="item item-video2">
           <video poster="" id="video2" autoplay controls muted loop height="100%">
-            <!-- Your video file here -->
             <source src="static/videos/language_control_5v5_2_HD.mp4"
             type="video/mp4">
           </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!-- Paper methond -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Training Performance of Diverse Style Policies</h2>
+        <div class="content has-text-justified">
+          <p>
+            During DST training, the style generator uses the proposed PSS method to produce style parameters. 
+            We evaluate PSS improvements from two perspectives: training efficiency and policy generalization.
+            <br><br>
+            <strong>Baselines:</strong> We compare PSS with two parameter sampling approaches: <strong>Uniform</strong> sampling 
+            (maintains static uniform distribution) and <strong>LSDR</strong> (learns multivariate Gaussian distribution for maximizing generalization). 
+            Unlike these methods, PSS uses entropy-based criteria for parameter sampling.
+            <br><br>
+            <strong>Training Efficiency:</strong> Results show PSS achieves superior performance across three key metrics: 
+            Style-based Expected Utility (SEU), Style-based Maximum Utility Loss (SMUL), and Style-based ELO rating (SELO). 
+            PSS demonstrates higher training efficiency with greater expected returns across various style parameter distributions 
+            and improved model strength in adversarial environments.
+            <br><br>
+            <strong>Policy Generalization:</strong> To demonstrate excellent generalization, we finely adjusted the style parameters 
+            and recorded corresponding in-game metrics. The PSS-trained model exhibits wider ranges of adjustment for in-game metrics 
+            compared to baselines, suggesting broader coverage of the style space with smooth linear interpolation properties.
+          </p>
+        </div>
+        
+        <!-- Table for PSS comparison -->
+        <div class="table-container" style="margin: 2rem 0;">
+          <table class="table is-striped is-hoverable" style="margin: 0 auto;">
+            <thead>
+              <tr>
+                <th>Metrics</th>
+                <th>SEU (↑)</th>
+                <th>SMUL (↓)</th>
+                <th>SELO (↑)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Uniform</strong></td>
+                <td>1.81 ± 0.09</td>
+                <td>4.13 ± 0.12</td>
+                <td>1029 ± 8.32</td>
+              </tr>
+              <tr>
+                <td><strong>LSDR</strong></td>
+                <td>1.87 ± 0.09</td>
+                <td>4.08 ± 0.17</td>
+                <td>1048 ± 9.57</td>
+              </tr>
+              <tr>
+                <td><strong>PSS</strong></td>
+                <td><strong>3.50 ± 0.03</strong></td>
+                <td><strong>2.44 ± 0.07</strong></td>
+                <td><strong>1142 ± 10.27</strong></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="has-text-centered" style="font-size: 0.9em; margin-top: 0.5rem;">
+            <em>Table: Comparison of training efficiency for the PSS method against baselines.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper methond -->
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div class="image-container">
+        <div class="image-item">
+          <img src="static/images/5v5_pss_ablation_fine_grit_result_four_legend_loc_right.png" alt="First image"/ style="width: 60%; display: block; margin: auto;">
+          <h2 class="subtitle has-text-centered">
+            Fine-grained adjustment of SP and their changes in in-game metrics for different baselines
+          </h2>
         </div>
       </div>
     </div>
@@ -371,6 +451,132 @@
 
 <!-- Paper methond -->
 <section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- <div class="image-container">
+      <div class="image-item">
+        <img src="static/images/training_scenario.png" alt="First image"/>
+      </div>
+    </div> -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Performance of Style Interpreter</h2>
+          <div class="content has-text-justified">
+            <p>
+              The Style Interpreter (SI) is a key module in LCDSP, responsible for converting high-level instructions into 
+              style parameters that control the DST policy. We quantitatively assess SI's instruction comprehension capabilities 
+              through dedicated testing.
+              <br><br>
+              <strong>Dataset:</strong> We tested SI on 8.6K high-level instructions (1.4K per tactic), with each instruction 
+              accompanied by corresponding style parameter labels through a rigorous labeling process.
+              <br><br>
+              <strong>Configuration:</strong> We utilize Qwen2.5-0.5B as the pre-trained language model within SI. 
+              The translation process is modeled as a multi-head regression task, with 80% instructions for training and 20% for validation.
+              <br><br>
+              <strong>Baselines:</strong> We compare SI with three language comprehension modules: <strong>Hill et al.</strong> (BERT-based instruction following), 
+              <strong>BC-Z</strong> (FiLM layer conditioning), and <strong>TALAR</strong> (direct BERT fine-tuning).
+              <br><br>
+              <strong>Results:</strong> SI outperforms all baselines in Mean Absolute Error (MAE) for instruction-to-parameter translation. 
+              Ablation studies show that the Adaptive Style-adjustment Block (ASaB) significantly enhances instruction comprehension performance. 
+              The results demonstrate SI's superior ability to accurately translate high-level instructions into corresponding style parameters.
+            </p>
+          </div>
+          
+          <div class="table-container" style="margin: 2rem 0;">
+            <table class="table is-striped is-hoverable" style="margin: 0 auto; font-size: 0.9em;">
+              <thead>
+                <tr>
+                  <th>Methods</th>
+                  <th>MAE (↓)</th>
+                  <th>Inference time (s) (↓)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="3" style="text-align: center; font-weight: bold;">
+                    Comparisons with Baselines
+                  </td>
+                </tr>
+                <tr>
+                  <td>Hill et al.</td>
+                  <td>0.923 ± 0.023</td>
+                  <td>0.032 ± 0.024</td>
+                </tr>
+                <tr>
+                  <td>BC-Z</td>
+                  <td>0.751 ± 0.026</td>
+                  <td>0.129 ± 0.090</td>
+                </tr>
+                <tr>
+                  <td>TALAR</td>
+                  <td>0.992 ± 0.021</td>
+                  <td><strong>0.009 ± 0.025</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>SI (Our method)</strong></td>
+                  <td><strong>0.671 ± 0.015</strong></td>
+                  <td>0.094 ± 0.027</td>
+                </tr>
+                <tr>
+                  <td colspan="3" style="text-align: center; font-weight: bold;">
+                    Ablation Test
+                  </td>
+                </tr>
+                <tr>
+                  <td>without ASaB</td>
+                  <td>0.752 ± 0.014</td>
+                  <td>0.023 ± 0.028</td>
+                </tr>
+                <tr>
+                  <td>with matmul fusion</td>
+                  <td>0.846 ± 0.064</td>
+                  <td>0.125 ± 0.028</td>
+                </tr>
+                <tr>
+                  <td>with cross-attention</td>
+                  <td>1.477 ± 0.054</td>
+                  <td>0.033 ± 0.026</td>
+                </tr>
+                <tr>
+                  <td>with Qwen2.5-3B</td>
+                  <td>0.629 ± 0.005</td>
+                  <td>0.785 ± 0.024</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="has-text-centered" style="font-size: 0.9em; margin-top: 0.5rem;">
+              <em>Table: Comparison of MAE and inference time among baselines and ablation tests.</em>
+            </p>
+          </div>
+
+    </div>
+  </div>
+</section>
+<!-- End paper methond -->
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div class="image-container">
+        <div class="image-item">
+          <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 250px; max-width: 500px;">
+              <img src="static/images/val_error_comparison.png" alt="Validation Error - Baselines Comparison" style="width: 100%;">
+            </div>
+            <div style="flex: 1; min-width: 250px; max-width: 500px;">
+              <img src="static/images/val_error_ablation.png" alt="Validation Error - Ablation Study" style="width: 100%;">
+            </div>
+          </div>
+          <h2 class="subtitle has-text-centered">
+            The curves of validation error for our method compared to baselines and ablation configurations.
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper methond -->
+<!-- <section class="section hero is-light">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-full">
@@ -385,11 +591,11 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!-- End paper methond -->
 
 <!-- Video carousel -->
-<section class="hero is-small">
+<!-- <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">GRF single-player scenario</h2>
@@ -444,7 +650,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!-- End video carousel -->
 
 <style>
@@ -476,7 +682,7 @@
 
 
 <!-- Video carousel -->
-<section class="hero is-small">
+<!-- <section class="hero is-small">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">GRF two-player scenario</h2>
@@ -545,7 +751,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!-- End video carousel -->
 
 <!-- Paper methond -->
@@ -617,8 +823,8 @@
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <pre><code>@inproceedings{
-        anonymous2024complexinstruction,
-        title={Complex Instruction Following with Diverse Style Policies},
+        anonymous2025complexinstruction,
+        title={Complex Instruction Following with Diverse Style Policies in Football Games},
         author={Anonymous},
         year={2025},
         note={under review}
